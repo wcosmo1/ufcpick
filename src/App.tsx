@@ -5,7 +5,7 @@ import { FightCardPage } from "./pages/FightCardPage";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/ufcpick">
       <Layout>
         <Routes>
           <Route path="/" element={<EventDashboard />} />

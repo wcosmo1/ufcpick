@@ -1,4 +1,8 @@
-# UFC Prediction & Research App
+# UFC Prediction & Research
+
+**Live preview (no install):** https://wcosmo1.github.io/ufcpick/
+
+Pushes to `main` auto-deploy via GitHub Pages. You do not need to run anything locally.
 
 Phase 1 — dark-mode MMA Event Dashboard, Fight Card, and Research modal with **mock data only**. No Supabase, no Firecrawl, no real API keys. Built for visual review before Phase 2.
 
