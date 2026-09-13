@@ -1,11 +1,12 @@
-import type { Fight } from "../types";
+import type { Fight, UserPick } from "../types";
 
 type Props = {
   fight: Fight;
+  userPick?: UserPick;
   onResearch: (fight: Fight) => void;
 };
 
-export function FightRow({ fight, onResearch }: Props) {
+export function FightRow({ fight, userPick, onResearch }: Props) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 rounded-lg border border-border bg-surface px-4 py-4 hover:border-border hover:bg-surface-2/80 transition-colors">
       <div className="flex-1 min-w-0">
@@ -16,9 +17,17 @@ export function FightRow({ fight, onResearch }: Props) {
           </span>
           <span className="text-cream">{fight.fighter_b}</span>
         </div>
-        <p className="mt-1 font-heading text-xs uppercase tracking-wider text-muted">
-          {fight.weight_class}
-        </p>
+        <div className="mt-1 flex flex-wrap items-center gap-2">
+          <p className="font-heading text-xs uppercase tracking-wider text-muted">
+            {fight.weight_class}
+          </p>
+          {userPick && (
+            <span className="inline-flex items-center rounded px-2 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-wider bg-gold/15 text-gold border border-gold/40">
+              Your pick: {userPick.predicted_winner} ·{" "}
+              {userPick.confidence_score}/10
+            </span>
+          )}
+        </div>
       </div>
       <button
         type="button"

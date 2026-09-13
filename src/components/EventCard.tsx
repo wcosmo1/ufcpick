@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import type { Event } from "../types";
+import { getFightsByEvent } from "../data/mockData";
+import { usePicks } from "../lib/picks";
 
 function formatDate(iso: string) {
   return new Date(iso + "T12:00:00").toLocaleDateString("en-US", {
@@ -19,6 +21,10 @@ function altitudeLabel(ft: number) {
 export function EventCard({ event }: { event: Event }) {
   const highAlt = event.altitude >= 5000;
   const isApex = event.cage_size === "Apex 25ft";
+  const eventFights = getFightsByEvent(event.event_id);
+  const { picks } = usePicks();
+  const pickedCount = eventFights.filter((f) => picks[f.fight_id]).length;
+  const total = eventFights.length;
 
   return (
     <Link
@@ -59,6 +65,9 @@ export function EventCard({ event }: { event: Event }) {
             }`}
           >
             Cage · {event.cage_size}
+          </span>
+          <span className="badge-cage inline-flex items-center rounded px-2.5 py-1 font-heading text-[11px] font-semibold bg-gold/10 text-gold border border-gold/40">
+            {pickedCount}/{total} picks
           </span>
         </div>
 

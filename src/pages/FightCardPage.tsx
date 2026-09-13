@@ -5,8 +5,10 @@ import {
   getFightsByEvent,
   getPredictionByFight,
 } from "../data/mockData";
+import { getFighterStatsForFight } from "../data/fighterStats";
 import { FightRow } from "../components/FightRow";
 import { ResearchModal } from "../components/ResearchModal";
+import { usePicks } from "../lib/picks";
 import type { CardPlacement, Fight, Prediction } from "../types";
 
 const SECTIONS: CardPlacement[] = ["Main", "Prelims", "Early Prelims"];
@@ -27,11 +29,16 @@ export function FightCardPage() {
     () => (eventId ? getFightsByEvent(eventId) : []),
     [eventId]
   );
+  const { picks } = usePicks();
 
   const [active, setActive] = useState<{
     fight: Fight;
     prediction: Prediction;
   } | null>(null);
+
+  const pickedCount = useMemo(() => {
+    return eventFights.filter((f) => picks[f.fight_id]).length;
+  }, [eventFights, picks]);
 
   if (!event) {
     return (
@@ -50,7 +57,6 @@ export function FightCardPage() {
   }
 
   const openResearch = (fight: Fight) => {
-    // PHASE 2: call research engine here instead of reading mock predictions
     const prediction = getPredictionByFight(fight.fight_id);
     if (prediction) {
       setActive({ fight, prediction });
@@ -83,6 +89,9 @@ export function FightCardPage() {
           <span className="badge-cage inline-flex rounded px-2.5 py-1 font-heading text-[11px] font-semibold bg-surface-2 text-cream/80 border border-border">
             Cage · {event.cage_size}
           </span>
+          <span className="badge-cage inline-flex rounded px-2.5 py-1 font-heading text-[11px] font-semibold bg-gold/10 text-gold border border-gold/40">
+            {pickedCount} of {eventFights.length} fights picked
+          </span>
         </div>
       </div>
 
@@ -109,6 +118,7 @@ export function FightCardPage() {
                   <FightRow
                     key={fight.fight_id}
                     fight={fight}
+                    userPick={picks[fight.fight_id]}
                     onResearch={openResearch}
                   />
                 ))}
@@ -122,6 +132,9 @@ export function FightCardPage() {
         <ResearchModal
           fight={active.fight}
           prediction={active.prediction}
+          fighterStats={getFighterStatsForFight(active.fight.fight_id)}
+          cageSize={event.cage_size}
+          altitude={event.altitude}
           onClose={() => setActive(null)}
         />
       )}

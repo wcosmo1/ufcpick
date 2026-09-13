@@ -25,4 +25,21 @@ export type Prediction = {
   predicted_winner: string;
   confidence_score: number; // 1-10
   reasoning_summary: string[]; // bullets
+  fighter_stats?: [FighterStats, FighterStats];
+};
+
+export type FighterStats = {
+  name: string;
+  camp: string;
+  slpm: number; // significant strikes landed per min
+  tdd: number; // takedown defense %
+  td_avg: number;
+  style: string; // e.g. "Wrestling" | "Boxing" | "Kickboxing"
+};
+
+export type UserPick = {
+  fight_id: string;
+  predicted_winner: string;
+  confidence_score: number; // 1-10
+  updated_at: string; // ISO
 };
