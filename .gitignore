@@ -1,26 +1,23 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
+# dependencies
 node_modules
+.pnpm-store
+
+# build
+.next
 dist
-dist-ssr
-*.local
+.turbo
+out
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# env
+.env
+.env.local
+.env.*.local
+
+# prisma
+packages/db/src/generated
+
+# misc
+*.log
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-screenshots/
+*.tsbuildinfo
+.vercel

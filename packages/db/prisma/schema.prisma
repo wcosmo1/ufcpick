@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+  // Default output so @prisma/client works after generate
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CardSection {
+  EARLY_PRELIM
+  PRELIM
+  MAIN
+}
+
+enum ResearchStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+model Venue {
+  id              String   @id @default(cuid())
+  name            String
+  city            String
+  cageSizeFeet    Int      @default(30)
+  altitudeMeters  Int      @default(0)
+  timezone        String   @default("America/New_York")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  events          Event[]
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  name      String
+  date      DateTime
+  venueId   String
+  venue     Venue    @relation(fields: [venueId], references: [id])
+  fights    Fight[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+}
+
+model Fighter {
+  id        String   @id @default(cuid())
+  name      String
+  nickname  String?
+  record    String?
+  weightClass String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  fightsA   Fight[]  @relation("FighterA")
+  fightsB   Fight[]  @relation("FighterB")
+  picks     ResearchReport[] @relation("PickWinner")
+}
+
+model Fight {
+  id           String      @id @default(cuid())
+  eventId      String
+  event        Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  fighterAId   String
+  fighterA     Fighter     @relation("FighterA", fields: [fighterAId], references: [id])
+  fighterBId   String
+  fighterB     Fighter     @relation("FighterB", fields: [fighterBId], references: [id])
+  cardSection  CardSection
+  weightClass  String?
+  isTitleFight Boolean     @default(false)
+  order        Int         @default(0)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  researchReports ResearchReport[]
+
+  @@index([eventId])
+  @@index([cardSection])
+}
+
+model ResearchReport {
+  id           String         @id @default(cuid())
+  fightId      String
+  fight        Fight          @relation(fields: [fightId], references: [id], onDelete: Cascade)
+  pickWinnerId String?
+  pickWinner   Fighter?       @relation("PickWinner", fields: [pickWinnerId], references: [id])
+  method       String?
+  confidence   Int?
+  whyBullets   Json?
+  status       ResearchStatus @default(PENDING)
+  summary      String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([fightId])
+  @@index([status])
+}
