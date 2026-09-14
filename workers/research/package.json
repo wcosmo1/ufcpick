@@ -1,0 +1,17 @@
+{
+  "name": "@ufc-cornerman/worker-research",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/runResearch.ts",
+  "types": "./src/runResearch.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf node_modules .turbo dist"
+  },
+  "dependencies": {
+    "@ufc-cornerman/research-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
