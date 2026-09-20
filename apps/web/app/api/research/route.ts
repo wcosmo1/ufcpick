@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { buildMockResearch, getFightById } from "@/lib/mock-data";
+import { buildMockResearch } from "@/lib/mock-data";
+import { getFight } from "@/lib/ufc";
 
 export async function POST(req: NextRequest) {
   let body: { fightId?: string };
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "fightId required" }, { status: 400 });
   }
 
-  const fight = getFightById(fightId);
+  const fight = await getFight(fightId);
   if (!fight) {
     return NextResponse.json({ error: "Fight not found" }, { status: 404 });
   }
