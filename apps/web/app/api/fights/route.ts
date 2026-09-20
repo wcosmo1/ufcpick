@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getFightsForEvent } from "@/lib/mock-data";
+import { getFights } from "@/lib/ufc";
 
 export async function GET(req: NextRequest) {
   const eventId = req.nextUrl.searchParams.get("eventId");
@@ -9,5 +9,6 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
   }
-  return NextResponse.json(getFightsForEvent(eventId));
+  const fights = await getFights(eventId);
+  return NextResponse.json(fights);
 }
